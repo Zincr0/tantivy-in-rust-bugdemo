@@ -1,0 +1,20 @@
+[package]
+name = "failgosample"
+version = "0.1.0"
+authors = ["daniel <dnielm@gmail.com>"]
+edition = "2021"
+
+# ejecutar cbindgen a mano o falla visual code
+[build-dependencies]
+cbindgen = "0.14.1"
+
+[dependencies]
+tantivy = "0.16.1"
+tempfile = "3.1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[lib]
+name = "failgosample"
+# crate-type = ["cdylib"] 
+crate_type = ["staticlib"]
