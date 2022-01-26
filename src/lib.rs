@@ -9,8 +9,7 @@ use tantivy::{doc, Index, ReloadPolicy};
 use std::os::raw::c_char;
 use std::ffi::CStr;
 use std::ffi::CString;
-
-
+use async_std::task;
 
 
 fn process() -> tantivy::Result<()> {
@@ -24,7 +23,7 @@ fn process() -> tantivy::Result<()> {
 
     let index = Index::create_in_ram(schema.clone());
 
-    // This segfault on go:
+    // This segfault on go on musl:
     // let mut index_writer = index.writer(10_000_000)?;
     // let mut index_writer = index.writer(1_000_000).unwrap();
     let mut index_writer = index.writer_with_num_threads(1, 10_000_000)?;
@@ -90,3 +89,12 @@ pub extern "C" fn freeFiltra(s: *mut c_char) {
         CString::from_raw(s)
     };
 }
+
+#[no_mangle]
+pub extern "C" fn justAnAsyncTest() {
+    println!("outside the async block!");
+    task::block_on(async {
+        println!("inside the async block");
+    })
+}
+

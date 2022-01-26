@@ -1,8 +1,10 @@
 package main
 
-// #cgo CFLAGS: -g -Wall -I${SRCDIR}
-// #cgo LDFLAGS: ${SRCDIR}/target/x86_64-unknown-linux-musl/release/libfailgosample.a
-// #include "libfailgosample.h"
+/*
+#cgo CFLAGS: -g -Wall -I${SRCDIR}
+#cgo LDFLAGS: ${SRCDIR}/../target/x86_64-unknown-linux-musl/release/libfailgosample.a
+#include "../libfailgosample.h"
+*/
 import "C"
 import (
 	"encoding/json"
@@ -49,12 +51,12 @@ func main() {
 	textItems = append(textItems, post1)
 	textItems = append(textItems, post2)
 
-	consulta := FakeSearch{SearchText: "fake search text", Posts: textItems}
+	demoSearch := FakeSearch{SearchText: "fake search text", Posts: textItems}
 
-	_, errf := doFakeSearch(consulta)
+	_, errf := doFakeSearch(demoSearch)
 	if errf != nil {
 		fmt.Printf("error! : %v \n", errf)
 	}
 
-	fmt.Println("done")
+	fmt.Println("done without errors.")
 }

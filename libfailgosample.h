@@ -10,4 +10,6 @@ char *filtra(const char *s);
 
 void freeFiltra(char *s);
 
+void justAnAsyncTest();
+
 #endif /* libfailgosample */
