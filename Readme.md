@@ -1,5 +1,5 @@
 
-## Compile for go
+## Compile for go, alternative 1
 
 Use Cargo.toml with
 ```
@@ -13,41 +13,45 @@ install x86_64-unknown-linux-musl
 rustup target add x86_64-unknown-linux-musl
 ```
 
-# Test the async bad function
+install musl
+```
+sudo apt-get install musl musl-tools musl-dev
+```
+
+build
 
 ```
 cargo build --release --target x86_64-unknown-linux-musl
 ```
 
-run testgo_async.go
+# Compile for go, alternative 2
+
+Use Cargo.toml with
 ```
-go run testmuslasync/testgo_async.go
+[lib]
+name = "failgosample"
+crate_type = ["staticlib"]
+```
+
+Use docker
+```
+docker run --rm -it -v "$(pwd)":/home/rust/src messense/rust-musl-cross:x86_64-musl cargo build --release
+```
+
+# Test the async function, alternative 1
+
+Run go using musl
+```
+CC=/usr/bin/musl-gcc go run --ldflags '-linkmode external -extldflags "-static"' testmuslasync/testgo_async.go
 ```
 
 
-# Build for musl that fails:
+# Test the async function, alternative 2
 
+Use docker
 ```
-cargo build --release --target x86_64-unknown-linux-musl
+docker run --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp tetafro/golang-gcc:1.17-alpine go run testmuslasync/testgo_async.go
 ```
-
-run testgo_musl.go
-```
-go run testmusl/testgo_musl.go
-```
-
-# Build for linux-gnu that works:
-
-Tested on ubuntu 20.04 only, with x86_64-unknown-linux-gnu as default.
-```
-cargo build
-```
-
-run testgo_notmusl.go
-```
-go run testnotmusl/testgo_notmusl.go
-```
-
 
 ## Compile for python
 

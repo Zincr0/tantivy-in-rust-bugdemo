@@ -9,7 +9,8 @@ use tantivy::{doc, Index, ReloadPolicy};
 use std::os::raw::c_char;
 use std::ffi::CStr;
 use std::ffi::CString;
-use async_std::task;
+//use async_std::task;
+use futures::executor;
 
 
 fn process() -> tantivy::Result<()> {
@@ -93,8 +94,11 @@ pub extern "C" fn freeFiltra(s: *mut c_char) {
 #[no_mangle]
 pub extern "C" fn justAnAsyncTest() {
     println!("outside the async block!");
-    task::block_on(async {
-        println!("inside the async block");
+    executor::block_on( async {
+        println!("inside the async block")
     })
+    /*task::block_on(async {
+        println!("inside the async block");
+    })*/
 }
 
